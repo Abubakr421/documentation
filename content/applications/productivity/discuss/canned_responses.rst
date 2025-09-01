@@ -28,14 +28,17 @@ Canned responses are managed through the **Discuss** application. To create a ne
 or manage the list of existing responses, navigate to :menuselection:`Discuss app --> Configuration
 --> Canned Responses`.
 
+.. image:: canned_responses/shortcut-substitution-list.png
+   :alt: A list of canned responses emphasizing the shortcut and substitution fields.
+
 Then, to create a new canned response, click :guilabel:`New` at the top-left of the list. Doing so
-reveals a new blank line in the list.
+reveals a new form where you can enter the details of the canned response.
 
 Canned responses consist of two main components, a *shortcut* the user enters, and the
 *substitution* that replaces the shortcut.
 
-.. image:: canned_responses/shortcut-substitution.png
-   :alt: A list of canned responses emphasizing the shortcut and substitution fields.
+.. image:: canned_responses/shortcut-substitution-form.png
+   :alt: A form for creating or editing a canned response, emphasizing the shortcut and substitution fields.
 
 Type a shortcut command in the :guilabel:`Shortcut` field. Next, click on the
 :guilabel:`Substitution` field, and type the message that will replace the shortcut.
@@ -45,9 +48,6 @@ Type a shortcut command in the :guilabel:`Shortcut` field. Next, click on the
    to use the responses, it prevents the list of responses from becoming disorganized and
    overwhelming.
 
-In the :guilabel:`Description` field, add any information that provides context for this response,
-such as guidelines for when it should or should not be used.
-
 The :guilabel:`Created by` field automatically populates with the name of the user that creates a
 new response. This field cannot be edited.
 
@@ -55,13 +55,15 @@ To :ref:`share <discuss/sharing-responses>` this response with other users, sele
 groups in the :guilabel:`Authorized Group` field that should have access.
 
 .. warning::
-   If the :guilabel:`Authorized Group` field is left blank, the response can **only** be used by the
+   If the :guilabel:`Authorized Group` field is set as :icon:`fa-lock` :guilabel:`Private`, the response can **only** be used by the
    user that created it.
+
+   If the :guilabel:`Authorized Group` field is set to a specific group, the response can be used by all members of that group.
 
    Canned responses created by the database are automatically credited as created by *OdooBot*. They
    must be assigned to an *authorized group* before they can be used by **any** users. To view the
    responses created by *OdooBot*, navigate to :menuselection:`Discuss app --> Configuration -->
-   Canned Responses`. Click into the :guilabel:`Search..` bar, and remove any filters.
+   Canned Responses`.
 
 Lastly, the :guilabel:`Last Used` field keeps track of the date and time each response was most
 recently used. This field cannot be edited.
