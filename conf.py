@@ -419,7 +419,10 @@ def setup(app):
     # Add a `condition` option on directives to ignore them based on config values
     app.add_config_value('odoo_dir_in_path', None, 'env')
     def context_eval(expr):
-        return eval(expr, {confval.name: confval.value for confval in app.config})
+        # Evaluate simple expressions against config values with builtins disabled
+        safe_globals = {"__builtins__": {}}
+        safe_globals.update({confval.name: confval.value for confval in app.config})
+        return eval(expr, safe_globals)
 
     def patch(to_patch):
         to_patch.option_spec['condition'] = context_eval
