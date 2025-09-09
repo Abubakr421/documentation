@@ -106,7 +106,8 @@
      */
      const _flagHeaderWithScrollPosition = () => {
          const header = document.querySelector('.o_main_header');
-         if (this.scrollY > 0) {
+         const scrollPositionY = window.scrollY || document.documentElement.scrollTop || 0;
+         if (scrollPositionY > 0) {
              header.classList.add('o_header_scrolled');
          } else {
              header.classList.remove('o_header_scrolled');

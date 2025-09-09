@@ -57,7 +57,11 @@ const _prepareAccordion = (tocElement) => {
         tocEntryList.classList.add('collapse');
 
         // Modify the <a> element only if it has no href; otherwise, let the redirection happen.
-        const relatedHeadingRef = tocEntryList.previousSibling;
+        // Use previousElementSibling to avoid hitting text nodes.
+        const relatedHeadingRef = tocEntryList.previousElementSibling;
+        if (!relatedHeadingRef) {
+            return; // Defensive: malformed DOM, skip
+        }
         if (relatedHeadingRef.getAttribute('href') === '#') {
             relatedHeadingRef.setAttribute('data-bs-target', `#${tocEntryList.id}`);
             relatedHeadingRef.setAttribute('data-bs-toggle', 'collapse');
@@ -175,13 +179,33 @@ const _generateFallbackUrls = async (targetUrl) => {
  * 'http' or 'https' are not tested.
  */
 const _getFirstValidUrl = async (urls) => {
-    for (let url of urls) {
-        if (url.startsWith('http')) {
-            const response = await fetch(url);
-            if (response.ok) {
-                return url;
+    // Prefer HEAD when supported; add timeout to avoid hanging on slow endpoints.
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    try {
+        for (let url of urls) {
+            if (!url.startsWith('http')) {
+                continue;
+            }
+            try {
+                const response = await fetch(url, { method: 'HEAD', signal: controller.signal });
+                if (response.ok) {
+                    return url;
+                }
+            } catch (e) {
+                // If HEAD not allowed or aborted, fallback to GET with Range to minimize cost
+                try {
+                    const response = await fetch(url, { headers: { 'Range': 'bytes=0-0' }, signal: controller.signal });
+                    if (response.ok) {
+                        return url;
+                    }
+                } catch (_) {
+                    // ignore and continue
+                }
             }
         }
+        return null; // No valid URL found.
+    } finally {
+        clearTimeout(timeoutId);
     }
-    return null; // No valid URL found.
 };
